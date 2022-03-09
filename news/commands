@@ -1,0 +1,87 @@
+python manage.py shell
+# EX № 1
+from newsportal.models import *
+user1 = User.objects.create_user('Buji')
+user2 = User.objects.create_user('Jack')
+# EX № 2
+author_buji = Author.objects.create(author_user=user1)
+author_jack = Author.objects.create(author_user=user2)
+# EX № 3
+cat1 = Category.objects.create(cat_model='History')
+cat2 = Category.objects.create(cat_model='Education')
+cat3 = Category.objects.create(cat_model='Physics')
+cat4 = Category.objects.create(cat_model='Mathematics')
+# EX № 4
+post1 = Post.objects.create(author=author_buji, categoryType='AR', title='Квантовая физика', text='Ква́нтовая фи́зика — раздел теоретической физики, в котором изучаются квантово-механические и квантово-полевые системы и законы их движения. Основные законы квантовой физики изучаются в рамках квантовой механики и квантовой теории поля и применяются в других разделах физики.')
+post2 = Post.objects.create(author=author_buji, categoryType='NW', title='Ученые нашли новые следы борьбы Древней Руси с Хазарским каганатом', text='Новые следы борьбы Древнерусского государства с Хазарским каганатом за влияние в лесостепной зоне обнаружили археологи музея-заповедника "Куликово поле". По их словам, найденные элементы вооружения позволяют яснее восстановить картину древней экспансии и уточнить хронологию одного из ее важных эпизодов. Об этом сообщили в пресс-службе музея.')
+post3 = Post.objects.create(author=author_jack, categoryType='AR', title='Производная функции', text='Произво́дная функции — понятие дифференциального исчисления, характеризующее скорость изменения функции в данной точке. Определяется как предел отношения приращения функции к приращению её аргумента при стремлении приращения аргумента к нулю, если такой предел существует. Функцию, имеющую конечную производную (в некоторой точке), называют дифференцируемой (в данной точке).')
+# EX № 5
+post1.postCategory.add(cat3)
+post1.postCategory.add(cat2)
+post2.postCategory.add(cat2)
+post2.postCategory.add(cat1)
+Post3.postCategory.add(Cat2)
+Post3.postCategory.add(Cat3)
+Post3.postCategory.add(Cat4)
+# EX № 6
+com1 = Comment.objects.create(commentPost = post1, commentUser = author_buji.author_user, text = 'its awesome. I dont understood this theme while wrote this article')
+com2 = Comment.objects.create(commentPost = post1, commentUser = author_jack.author_user, text = 'this article is only shit! never read this comic please!!!')
+com3 = Comment.objects.create(commentPost = post2, commentUser = author_buji.author_user, text = 'wtf.. lol... but beautiful news for us')
+com4 = Comment.objects.create(commentPost = post3, commentUser = author_jack.author_user, text = 'Its base knowledges in mathematics. It can be use in physics')
+# EX № 7
+>>> post3.dislike()
+>>> post3.dislike()
+>>> post3.dislike()
+>>> post3.dislike()
+>>> post3.dislike()
+>>> post3.like()
+>>> post3.like()
+>>> post3.like()
+>>> post3.like()
+>>> post3.like()
+>>> post3.like()
+>>> post3.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post2.like()
+>>> post2.like()
+>>> post2.like()
+>>> post2.dislike()
+>>> post3.dislike()
+>>> post3.dislike()
+>>> post3.dislike()
+>>> post3.like()
+>>> post3.like()
+>>> com1.like()
+>>> com1.like()
+>>> com1.dislike()
+>>> com2.like()
+>>> com2.like()
+>>> com2.like()
+>>> com3.dislike()
+>>> com3.dislike()
+>>> com3.dislike()
+>>> com4.dislike()
+>>> com4.dislike()
+>>> com4.like()
+>>> com4.like()
+# EX № 8
+author_buji.update_rating()
+author_jack.update_rating()
+author_buji.author_rating()
+author_jack.author_rating()
+# EX № 9
+Author.objects.all().order_by('-author_rating')[0].author_user.username
+Author.objects.all().order_by('-author_rating')[0].author_rating
+# EX № 10
+bestPost = Post.objects.all().order_by('-rating')[0]
+print(f'Дата добавления: {bestPost.dateCreate}, Автор: {bestPost.author.author_user.username}, Рейтинг: {bestPost.rating}, Заголовок: {bestPost.title},\nПревью: \n{bestPost.preview()}')
+# EX № 11
+comments_bp = bestPost.comment_set.all()
+for i in comments_bp:
+    print(i.date_create,'||| ', i.commentUser.username,'||| ', i.rating,'||| ', i.text)
